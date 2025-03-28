@@ -15,7 +15,8 @@ SOURCES += \
     erasetool.cpp \
     main.cpp \
     mainwindow.cpp \
-    spraytool.cpp
+    spraytool.cpp \
+    toolcontroller.cpp
 
 HEADERS += \
     basetool.h \
@@ -23,7 +24,8 @@ HEADERS += \
     canvas.h \
     erasetool.h \
     mainwindow.h \
-    spraytool.h
+    spraytool.h \
+    toolcontroller.h
 
 FORMS += \
     mainwindow.ui
