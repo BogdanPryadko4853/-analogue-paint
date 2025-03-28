@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     basetool.cpp \
+    brushtool.cpp \
     canvas.cpp \
     erasetool.cpp \
     main.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
 
 HEADERS += \
     basetool.h \
+    brushtool.h \
     canvas.h \
     erasetool.h \
     mainwindow.h \
