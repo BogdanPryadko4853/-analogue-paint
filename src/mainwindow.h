@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <memory>
 #include "canvas/canvas.h"
 #include "toolcontroller/toolcontroller.h"
 
@@ -10,7 +11,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 protected:
@@ -25,7 +26,6 @@ private slots:
     void onClearClicked();
     void onSaveClicked();
     void onPenWidthChanged(int width);
-    void onToolSelected(QAction* action);
     void onBrushStyleSelected(QAction* action);
     void onImageUpdated(const QImage &image);
     void newFile();
@@ -36,12 +36,15 @@ private:
     void createMenuBar();
     void setupTools();
     void setupBrushStyles();
+    void setupStyleSheets();
+    void initializeCanvas();
+    void initializeToolController();
 
-    Canvas *m_canvas;
-    ToolController *m_toolController;
+    std::unique_ptr<Canvas> m_canvas;
+    std::unique_ptr<ToolController> m_toolController;
     QImage m_displayImage;
-    QActionGroup *m_toolGroup;
-    QActionGroup *m_brushStyleGroup;
+    QActionGroup* m_toolGroup;
+    QActionGroup* m_brushStyleGroup;
 };
 
 #endif // MAINWINDOW_H

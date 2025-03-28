@@ -3,6 +3,8 @@
 
 PenTool::PenTool(QObject *parent) : BaseTool(parent)
 {
+    QPen pen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    setPen(pen);
 }
 
 void PenTool::onMousePress(const QPoint &point, Canvas *canvas)

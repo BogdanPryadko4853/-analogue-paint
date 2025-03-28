@@ -3,12 +3,19 @@
 
 #include <QObject>
 #include <QImage>
+#include <memory>
 
 class Canvas : public QObject
 {
     Q_OBJECT
 public:
+    using Ptr = std::unique_ptr<Canvas>;
+
     explicit Canvas(QObject *parent = nullptr);
+
+    static Ptr create(QObject *parent = nullptr) {
+        return Ptr(new Canvas(parent));
+    }
 
     const QImage& image() const;
     void resize(const QSize &newSize);
@@ -27,4 +34,4 @@ private:
     QImage m_image;
 };
 
-#endif
+#endif // CANVAS_H
