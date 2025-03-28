@@ -11,12 +11,14 @@ CONFIG += c++17
 SOURCES += \
     basetool.cpp \
     canvas.cpp \
+    erasetool.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     basetool.h \
     canvas.h \
+    erasetool.h \
     mainwindow.h
 
 FORMS += \
