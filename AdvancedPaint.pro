@@ -13,13 +13,15 @@ SOURCES += \
     canvas.cpp \
     erasetool.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    spraytool.cpp
 
 HEADERS += \
     basetool.h \
     canvas.h \
     erasetool.h \
-    mainwindow.h
+    mainwindow.h \
+    spraytool.h
 
 FORMS += \
     mainwindow.ui
