@@ -4,6 +4,7 @@ release/canvas.o
 release/erasetool.o
 release/main.o
 release/mainwindow.o
+release/pentool.o
 release/spraytool.o
 release/toolcontroller.o
 release/moc_basetool.o
@@ -11,4 +12,6 @@ release/moc_brushtool.o
 release/moc_canvas.o
 release/moc_erasetool.o
 release/moc_mainwindow.o
+release/moc_pentool.o
 release/moc_spraytool.o
+release/moc_toolcontroller.o

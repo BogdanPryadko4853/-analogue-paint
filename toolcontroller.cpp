@@ -22,7 +22,6 @@ void ToolController::setCurrentTool(BaseTool *tool)
     }
 
     m_currentTool = tool;
-
     if (qobject_cast<EraserTool*>(tool)) {
         QPen eraserPen(Qt::white, m_currentPen.width()*2,
                        Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
@@ -40,7 +39,6 @@ BaseTool* ToolController::currentTool() const
 void ToolController::setPen(const QPen &pen)
 {
     m_currentPen = pen;
-
     if (m_currentTool) {
         if (qobject_cast<EraserTool*>(m_currentTool)) {
             QPen eraserPen = pen;
