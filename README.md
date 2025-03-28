@@ -1,4 +1,4 @@
-# 🎨 Paint Markup - Инструмент для рисования
+# 🎨 Paint - Инструмент для рисования
 
 ## 📌 Основные возможности
 
@@ -31,13 +31,9 @@
 
 ## 🚀 Быстрый старт
 
-1. Скачайте [последнюю версию](https://example.com/download)
-2. Запустите `PaintMarkup.exe`
-3. Начните рисовать!
-
 ```bash
 # Для разработчиков
-git clone https://github.com/yourrepo/paint-markup
-cd paint-markup && mkdir build && cd build
+git clone https://github.com/BogdanPryadko4853/pain
+cd paint && mkdir build && cd build
 cmake .. && make
-./PaintMarkup
+./paint
