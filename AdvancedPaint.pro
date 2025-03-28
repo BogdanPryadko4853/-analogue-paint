@@ -1,33 +1,27 @@
-QT       += core gui
-
+QT += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
 CONFIG += c++17
 
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
 SOURCES += \
-    basetool.cpp \
-    brushtool.cpp \
-    canvas.cpp \
-    erasetool.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    pentool.cpp \
-    spraytool.cpp \
-    toolcontroller.cpp
+    src/basetool/basetool.cpp \
+    src/brushtool/brushtool.cpp \
+    src/canvas/canvas.cpp \
+    src/erasetool/erasetool.cpp \
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/pentool/pentool.cpp \
+    src/spraytool/spraytool.cpp \
+    src/toolcontroller/toolcontroller.cpp
 
 HEADERS += \
-    basetool.h \
-    brushtool.h \
-    canvas.h \
-    erasetool.h \
-    mainwindow.h \
-    pentool.h \
-    spraytool.h \
-    toolcontroller.h
+    src/basetool/basetool.h \
+    src/brushtool/brushtool.h \
+    src/canvas/canvas.h \
+    src/erasetool/erasetool.h \
+    src/mainwindow.h \
+    src/pentool/pentool.h \
+    src/spraytool/spraytool.h \
+    src/toolcontroller/toolcontroller.h
 
 FORMS += \
     mainwindow.ui
