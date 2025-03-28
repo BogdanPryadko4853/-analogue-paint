@@ -32,7 +32,7 @@
 
 ```bash
 # Для разработчиков
-git clone https://github.com/BogdanPryadko4853/pain
+git clone https://github.com/BogdanPryadko4853/paint
 cd paint && mkdir build && cd build
 cmake .. && make
 ./paint
