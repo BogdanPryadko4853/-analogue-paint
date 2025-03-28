@@ -159,10 +159,8 @@ void MainWindow::setupTools()
     widthSpinBox->setFixedWidth(60);
     connect(widthSpinBox, QOverload<int>::of(&QSpinBox::valueChanged),
             [this](int width) {
-
                 QPen pen = m_toolController->pen();
                 pen.setWidth(width);
-
                 m_toolController->setPen(pen);
 
                 if (EraserTool* eraser = qobject_cast<EraserTool*>(
@@ -189,3 +187,182 @@ void MainWindow::setupTools()
 }
 
 
+void MainWindow::createMenuBar()
+{
+    QMenuBar *menuBar = this->menuBar();
+
+    QMenu *fileMenu = menuBar->addMenu("&Файл");
+    fileMenu->addAction("&Новый", this, &MainWindow::newFile);
+    fileMenu->addAction("&Открыть...", this, &MainWindow::open);
+    fileMenu->addAction("&Сохранить", this, &MainWindow::save);
+    fileMenu->addSeparator();
+    fileMenu->addAction("&Выход", qApp, &QApplication::quit);
+
+    QMenu *toolsMenu = menuBar->addMenu("&Инструменты");
+
+    QActionGroup *toolsGroup = new QActionGroup(this);
+
+    QAction *penAction = toolsMenu->addAction(QIcon(":/icons/pen.png"), "&Карандаш");
+    penAction->setCheckable(true);
+    penAction->setChecked(true);
+    penAction->setData(1);
+    toolsGroup->addAction(penAction);
+
+    QAction *brushAction = toolsMenu->addAction(QIcon(":/icons/brush.png"), "&Кисть");
+    brushAction->setCheckable(true);
+    brushAction->setData(2);
+    toolsGroup->addAction(brushAction);
+
+    QAction *eraserAction = toolsMenu->addAction(QIcon(":/icons/eraser.png"), "&Ластик");
+    eraserAction->setCheckable(true);
+    eraserAction->setData(3);
+    toolsGroup->addAction(eraserAction);
+
+    QAction *sprayAction = toolsMenu->addAction(QIcon(":/icons/spray.png"), "&Спрей");
+    sprayAction->setCheckable(true);
+    sprayAction->setData(4);
+    toolsGroup->addAction(sprayAction);
+
+    connect(toolsGroup, &QActionGroup::triggered, this, [this](QAction *action) {
+
+        switch(action->data().toInt()) {
+        case 1: m_toolController->setCurrentTool(new PenTool(this)); break;
+        case 2: m_toolController->setCurrentTool(new BrushTool(this)); break;
+        case 3: {
+            EraserTool *eraser = new EraserTool(this);
+            eraser->setPen(QPen(Qt::white, m_toolController->pen().width() * 2,
+                                Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            m_toolController->setCurrentTool(eraser);
+            break;
+        }
+        case 4: m_toolController->setCurrentTool(new SprayTool(this)); break;
+        }
+    });
+}
+
+void MainWindow::setupBrushStyles()
+{
+    QToolBar *brushToolBar = addToolBar("Brush Styles");
+    brushToolBar->setStyleSheet("QToolBar { background: #f0f0f0; }");
+
+    m_brushStyleGroup = new QActionGroup(this);
+
+    auto createStyleAction = [this](const QString& text, Qt::PenStyle style) {
+        QAction *action = new QAction(text, this);
+        action->setCheckable(true);
+        action->setData(static_cast<int>(style));
+
+        QPixmap pixmap(32, 32);
+        pixmap.fill(Qt::transparent);
+        QPainter painter(&pixmap);
+        painter.setPen(QPen(Qt::black, 2, style));
+        painter.drawLine(5, 16, 27, 16);
+        action->setIcon(QIcon(pixmap));
+
+        m_brushStyleGroup->addAction(action);
+        return action;
+    };
+
+    createStyleAction("Solid", Qt::SolidLine)->setChecked(true);
+    createStyleAction("Dash", Qt::DashLine);
+    createStyleAction("Dot", Qt::DotLine);
+    createStyleAction("Dash Dot", Qt::DashDotLine);
+    createStyleAction("Dash Dot Dot", Qt::DashDotDotLine);
+
+    for (auto action : m_brushStyleGroup->actions()) {
+        brushToolBar->addAction(action);
+    }
+
+    connect(m_brushStyleGroup, &QActionGroup::triggered, this, &MainWindow::onBrushStyleSelected);
+}
+
+void MainWindow::onColorClicked()
+{
+    QColor newColor = QColorDialog::getColor(m_toolController->pen().color(), this, "Select Color");
+    if (newColor.isValid()) {
+        QPen pen = m_toolController->pen();
+        pen.setColor(newColor);
+        m_toolController->setPen(pen);
+    }
+}
+
+void MainWindow::onClearClicked()
+{
+    m_canvas->clear();
+}
+
+void MainWindow::onSaveClicked()
+{
+    QString filePath = QFileDialog::getSaveFileName(this, "Save Image", "",
+                                                    "PNG (*.png);;JPEG (*.jpg *.jpeg);;BMP (*.bmp)");
+    if (!filePath.isEmpty()) {
+        if (!m_canvas->save(filePath)) {
+            QMessageBox::warning(this, "Error", "Failed to save image");
+        }
+    }
+}
+
+void MainWindow::onPenWidthChanged(int width)
+{
+    QPen pen = m_toolController->pen();
+    pen.setWidth(width);
+    m_toolController->setPen(pen);
+}
+
+void MainWindow::onToolSelected(QAction* action)
+{
+    Q_UNUSED(action);
+}
+
+
+
+void MainWindow::onImageUpdated(const QImage &image)
+{
+    m_displayImage = image;
+    update();
+}
+
+void MainWindow::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    painter.drawImage(0, 0, m_displayImage);
+    QMainWindow::paintEvent(event);
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    m_canvas->resize(event->size());
+    QMainWindow::resizeEvent(event);
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        m_toolController->onMousePress(event->pos(), m_canvas);
+    }
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event->buttons() & Qt::LeftButton) {
+        m_toolController->onMouseMove(event->pos(), m_canvas);
+    }
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        m_toolController->onMouseRelease(event->pos(), m_canvas);
+    }
+}
+
+void MainWindow::onBrushStyleSelected(QAction* action)
+{
+    Qt::PenStyle style = static_cast<Qt::PenStyle>(action->data().toInt());
+
+    if (!qobject_cast<EraserTool*>(m_toolController->currentTool())) {
+        QPen pen = m_toolController->pen();
+        pen.setStyle(style);
+        m_toolController->setPen(pen);
+    }
+}
