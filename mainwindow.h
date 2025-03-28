@@ -2,12 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
+#include "canvas.h"
+#include "toolcontroller.h"
 
 class MainWindow : public QMainWindow
 {
@@ -17,7 +13,35 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+    void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
+private slots:
+    void onColorClicked();
+    void onClearClicked();
+    void onSaveClicked();
+    void onPenWidthChanged(int width);
+    void onToolSelected(QAction* action);
+    void onBrushStyleSelected(QAction* action);
+    void onImageUpdated(const QImage &image);
+    void newFile();
+    void open();
+    void save();
+
 private:
-    Ui::MainWindow *ui;
+    void createMenuBar();
+    void setupTools();
+    void setupBrushStyles();
+
+    Canvas *m_canvas;
+    ToolController *m_toolController;
+    QImage m_displayImage;
+    QActionGroup *m_toolGroup;
+    QActionGroup *m_brushStyleGroup;
 };
+
 #endif // MAINWINDOW_H
