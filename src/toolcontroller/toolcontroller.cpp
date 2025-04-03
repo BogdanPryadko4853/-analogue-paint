@@ -6,16 +6,16 @@
 
 ToolController::ToolController(QObject *parent)
     : QObject(parent),
-    m_currentTool(std::make_unique<PenTool>(this)),
+    m_currentTool(smart_ptr<BaseTool>::make_derived<PenTool>(parent)),
     m_currentPen(Qt::black, 3, Qt::SolidLine)
 {
 }
 
-void ToolController::setCurrentTool(std::unique_ptr<BaseTool> tool)
+void ToolController::setCurrentTool(smart_ptr<BaseTool> tool)
 {
     if (!tool) return;
 
-    if (dynamic_cast<EraserTool*>(tool.get())) {
+    if (auto* eraser = dynamic_cast<EraserTool*>(tool.get())) {
         QPen eraserPen(Qt::white, m_currentPen.width() * 2,
                        Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
         tool->setPen(eraserPen);
@@ -86,22 +86,19 @@ void ToolController::setBrushStyle(Qt::PenStyle style)
     }
 }
 
-std::unique_ptr<PenTool> ToolController::createPenTool(QObject* parent)
-{
-    return std::make_unique<PenTool>(parent);
+
+smart_ptr<PenTool> ToolController::createPenTool(QObject* parent) {
+    return smart_ptr<PenTool>(new PenTool(parent));
 }
 
-std::unique_ptr<BrushTool> ToolController::createBrushTool(QObject* parent)
-{
-    return std::make_unique<BrushTool>(parent);
+smart_ptr<BrushTool> ToolController::createBrushTool(QObject* parent) {
+    return smart_ptr<BrushTool>(new BrushTool(parent));
 }
 
-std::unique_ptr<EraserTool> ToolController::createEraserTool(QObject* parent)
-{
-    return std::make_unique<EraserTool>(parent);
+smart_ptr<EraserTool> ToolController::createEraserTool(QObject* parent) {
+    return smart_ptr<EraserTool>(new EraserTool(parent));
 }
 
-std::unique_ptr<SprayTool> ToolController::createSprayTool(QObject* parent)
-{
-    return std::make_unique<SprayTool>(parent);
+smart_ptr<SprayTool> ToolController::createSprayTool(QObject* parent) {
+    return smart_ptr<SprayTool>(new SprayTool(parent));
 }

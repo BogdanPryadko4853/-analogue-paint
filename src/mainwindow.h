@@ -2,9 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <memory>
 #include "canvas/canvas.h"
 #include "toolcontroller/toolcontroller.h"
+#include "smart_ptr.h"
 
 class MainWindow : public QMainWindow
 {
@@ -37,11 +37,9 @@ private:
     void setupTools();
     void setupBrushStyles();
     void setupStyleSheets();
-    void initializeCanvas();
-    void initializeToolController();
 
-    std::unique_ptr<Canvas> m_canvas;
-    std::unique_ptr<ToolController> m_toolController;
+    smart_ptr<Canvas> m_canvas;
+    smart_ptr<ToolController> m_toolController;
     QImage m_displayImage;
     QActionGroup* m_toolGroup;
     QActionGroup* m_brushStyleGroup;
