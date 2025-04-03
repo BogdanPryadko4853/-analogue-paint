@@ -12,11 +12,9 @@ public:
     smart_ptr() noexcept : ptr(nullptr) {}
     explicit smart_ptr(T* p) noexcept : ptr(p) {}
 
-    // Удаление копирования
     smart_ptr(const smart_ptr&) = delete;
     smart_ptr& operator=(const smart_ptr&) = delete;
 
-    // Перемещение
     smart_ptr(smart_ptr&& other) noexcept : ptr(other.ptr) {
         other.ptr = nullptr;
     }
