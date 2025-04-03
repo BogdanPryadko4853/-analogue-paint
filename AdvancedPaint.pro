@@ -10,6 +10,7 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/pentool/pentool.cpp \
+    src/smart_ptr.cpp \
     src/spraytool/spraytool.cpp \
     src/toolcontroller/toolcontroller.cpp
 
@@ -20,6 +21,7 @@ HEADERS += \
     src/erasetool/erasetool.h \
     src/mainwindow.h \
     src/pentool/pentool.h \
+    src/smart_ptr.h \
     src/spraytool/spraytool.h \
     src/toolcontroller/toolcontroller.h
 

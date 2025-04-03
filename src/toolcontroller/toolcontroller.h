@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QPen>
-#include <memory>
+#include "../smart_ptr.h"
 #include "../basetool/basetool.h"
 
 class PenTool;
@@ -19,7 +19,7 @@ public:
     explicit ToolController(QObject *parent = nullptr);
     ~ToolController() = default;
 
-    void setCurrentTool(std::unique_ptr<BaseTool> tool);
+    void setCurrentTool(smart_ptr<BaseTool> tool);
     BaseTool* currentTool() const;
 
     void setPen(const QPen &pen);
@@ -30,15 +30,15 @@ public:
     void onMouseRelease(const QPoint &point, Canvas *canvas);
     void setBrushStyle(Qt::PenStyle style);
 
-    static std::unique_ptr<PenTool> createPenTool(QObject* parent);
-    static std::unique_ptr<BrushTool> createBrushTool(QObject* parent);
-    static std::unique_ptr<EraserTool> createEraserTool(QObject* parent);
-    static std::unique_ptr<SprayTool> createSprayTool(QObject* parent);
+    static smart_ptr<PenTool> createPenTool(QObject* parent);
+    static smart_ptr<BrushTool> createBrushTool(QObject* parent);
+    static smart_ptr<EraserTool> createEraserTool(QObject* parent);
+    static smart_ptr<SprayTool> createSprayTool(QObject* parent);
 
 private:
     void updateCurrentToolPen();
 
-    std::unique_ptr<BaseTool> m_currentTool;
+    smart_ptr<BaseTool> m_currentTool;
     QPen m_currentPen;
 };
 

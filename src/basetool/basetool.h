@@ -5,6 +5,7 @@
 #include <QPoint>
 #include <QPen>
 #include <memory>
+#include "../smart_ptr.h"
 
 class Canvas;
 
@@ -23,11 +24,11 @@ public:
     const QPen& pen() const;
 
     template<typename T, typename... Args>
-    static std::unique_ptr<T> create(Args&&... args)
+    static smart_ptr<T> create(Args&&... args)
     {
         static_assert(std::is_base_of<BaseTool, T>::value,
                       "T must inherit from BaseTool");
-        return std::make_unique<T>(std::forward<Args>(args)...);
+        return smart_ptr<T>::make(std::forward<Args>(args)...);
     }
 
 protected:

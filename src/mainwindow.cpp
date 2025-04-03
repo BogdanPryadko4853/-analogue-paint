@@ -149,7 +149,7 @@ void MainWindow::setupTools()
         action->setCheckable(true);
         m_toolGroup->addAction(action);
         connect(action, &QAction::triggered, [this, tool] {
-            m_toolController->setCurrentTool(std::unique_ptr<BaseTool>(tool));
+            m_toolController->setCurrentTool(smart_ptr<BaseTool>(tool));
         });
         mainToolBar->addAction(action);
         return action;
@@ -179,7 +179,6 @@ void MainWindow::setupTools()
 void MainWindow::createMenuBar()
 {
     QMenuBar *menuBar = this->menuBar();
-
     QMenu *fileMenu = menuBar->addMenu("&File");
     fileMenu->addAction("&New", this, &MainWindow::newFile);
     fileMenu->addAction("&Open...", this, &MainWindow::open);
@@ -203,23 +202,30 @@ void MainWindow::createMenuBar()
     addToolAction(":/icons/eraser.png", "&Eraser", 3);
     addToolAction(":/icons/spray.png", "&Spray", 4);
 
+    // mainwindow.cpp (исправленный фрагмент)
     connect(toolsGroup, &QActionGroup::triggered, this, [this](QAction* action) {
         switch(action->data().toInt()) {
         case 1:
-            m_toolController->setCurrentTool(std::make_unique<PenTool>(this));
+            m_toolController->setCurrentTool(
+                smart_ptr<BaseTool>::make_derived<PenTool>(this)
+                );
             break;
         case 2:
-            m_toolController->setCurrentTool(std::make_unique<BrushTool>(this));
+            m_toolController->setCurrentTool(
+                smart_ptr<BaseTool>::make_derived<BrushTool>(this)
+                );
             break;
         case 3: {
-            auto eraser = std::make_unique<EraserTool>(this);
+            auto eraser = smart_ptr<BaseTool>::make_derived<EraserTool>(this);
             eraser->setPen(QPen(Qt::white, m_toolController->pen().width()*2,
                                 Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             m_toolController->setCurrentTool(std::move(eraser));
             break;
         }
         case 4:
-            m_toolController->setCurrentTool(std::make_unique<SprayTool>(this));
+            m_toolController->setCurrentTool(
+                smart_ptr<BaseTool>::make_derived<SprayTool>(this)
+                );
             break;
         }
     });

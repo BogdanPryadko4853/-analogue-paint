@@ -4,18 +4,18 @@
 #include <QObject>
 #include <QImage>
 #include <memory>
+#include "../smart_ptr.h"
 
 class Canvas : public QObject
 {
     Q_OBJECT
 public:
-    using Ptr = std::unique_ptr<Canvas>;
-
-    explicit Canvas(QObject *parent = nullptr);
-
+    using Ptr = smart_ptr<Canvas>;
     static Ptr create(QObject *parent = nullptr) {
         return Ptr(new Canvas(parent));
     }
+
+    explicit Canvas(QObject *parent = nullptr);
 
     const QImage& image() const;
     void resize(const QSize &newSize);
